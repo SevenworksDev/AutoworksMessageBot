@@ -119,10 +119,11 @@ def bot():
     user, tsubject, tbody, targetAcc, messageID = getMessage()
 
     if tsubject == "hello":
-        uploadMessage(f"[Auto-Responder]: Vacation", f"Hello {user}, I see you have messaged me but I am not currently availible to speak to you right now because I am taking a two week vacation. Talk to you soon!")
-    elif tsubject == "hello2":
+        uploadMessage(f"Hello", f"Hello {user}, I see you have messaged me!")
+    elif tsubject == "hi":
+        uploadMessage(f"Hello", f"Hello {user}, I see you have messaged me!")
         pass
-    elif tsubject == "hello3":
+    elif tsubject == "i swear no one cares about this project and im wasting my life for this just so i can get a couple smiles on SOME PEOPLES faces but hey at least i can say i made this am i right?? AM I RIGHT!?":
         pass
     else:
         pass
