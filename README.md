@@ -1,4 +1,4 @@
-# Autoworks - v0.1
+# <a href="https://gdbrowser.com/u/Autoworks">Autoworks</a> - v0.1
 ## Commands
 ```
 help - return list of commands  
