@@ -62,6 +62,8 @@ def getMessage():
     data = {
         "accountID": accountid,
         "gjp": gjp_encrypt(password),
+        "getSent": "0", # Prevent GDPS Servers giving blank data
+        "page": "0", # Prevent GDPS Servers giving blank data
         "secret": "Wmfd2893gb7"
     }
     try:
@@ -77,11 +79,13 @@ def getMessage():
             "secret": "Wmfd2893gb7"
         }
         rr = requests.post("http://www.boomlings.com/database/downloadGJMessage20.php", data=data, headers=headers).text
+        
         user = rr.split(":")[1]
         tsubject = base64_decode(rr.split(":")[9])
         tbody = message_decode(rr.split(":")[15])
         targetAcc = rr.split(":")[5]
         messageID = rr.split(":")[7]
+        
         return user, tsubject, tbody, targetAcc, messageID
     except Exception:
         return None, None, None, None, None
@@ -118,16 +122,38 @@ def uploadMessage(subject, body):
 def bot():
     user, tsubject, tbody, targetAcc, messageID = getMessage()
 
-    if tsubject == "hello":
-        uploadMessage(f"Hello", f"Hello {user}, I see you have messaged me!")
-    elif tsubject == "hi":
-        uploadMessage(f"Hello", f"Hello {user}, I see you have messaged me!")
-        pass
-    elif tsubject == "i swear no one cares about this project and im wasting my life for this just so i can get a couple smiles on SOME PEOPLES faces but hey at least i can say i made this am i right?? AM I RIGHT!?":
-        pass
+    # Responds to replies also.
+    if tsubject == "help" or tsubject == "Re: help":
+        helpmenu = "Commands: yo mama, dad joke, cat fact, task, joke, time, hello, cool, talking ben"
+        uploadMessage(tsubject, helpmenu)
+    elif tsubject == "yo mama" or tsubject == "Re: yo mama":
+        msg = requests.get("https://api.autoworks.repl.co/api/yoMama.php").text
+        uploadMessage(tsubject, msg)
+    elif tsubject == "dad joke" or tsubject == "Re: dad joke":
+        msg = requests.get("https://api.autoworks.repl.co/api/dadJoke.php").text
+        uploadMessage(tsubject, msg)
+    elif tsubject == "cat fact" or tsubject == "Re: cat fact":
+        msg = requests.get("https://api.autoworks.repl.co/api/catFacts.php").text
+        uploadMessage(tsubject, msg)
+    elif tsubject == "task" or tsubject == "Re: task":
+        msg = requests.get("https://api.autoworks.repl.co/api/getALife.php").text
+        uploadMessage(tsubject, msg)
+    elif tsubject == "joke" or tsubject == "Re: joke":
+        msg = requests.get("https://official-joke-api.appspot.com/random_joke").json()
+        uploadMessage(tsubject, f"{msg['setup']} {msg['punchline']}")
+    elif tsubject == "time" or tsubject == "Re: time":
+        current_time = time.strftime("%H:%M:%S")
+        uploadMessage(tsubject, f"The current time for me is {current_time}.")
+    elif tsubject == "hello" or tsubject == "Re: hello":
+        uploadMessage(tsubject, f"Hello {user}!")
+    elif tsubject == "cool" or tsubject == "Re: cool":
+        uploadMessage(tsubject, f"{user} is {random.randint(0,100)}% cool.")
+    elif tsubject == "talking ben" or tsubject == "Re: talking ben":
+        msg = random.choice(['Ben?', 'No.', 'Yes?', 'Oh-ho-ho!', 'Na-na-na-na-na.', 'Eurgh.'])
+        uploadMessage(tsubject, msg)
     else:
         pass
 
 while True:
     bot()
-    time.sleep(10)
+    time.sleep(7) # Decrease if you want to have your bot go faster on GDPS servers if you dont have ratelimitihg
